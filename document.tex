@@ -918,18 +918,19 @@
 					\textbf{Model} & \textbf{Anatomy} & \textbf{Medical Genetics} & \textbf{College Medicine} & \textbf{Clinical Knowledge} & \textbf{Professional Medicine} \\
 					\hline
 					PersianMind & 25.18\% & 34.0\% & 20.23\% & 25.28\% & 23.89\% \\
-					aya-expanse-8b (baseline) & 40.74\% & 49.0\% & 44.51\% & 52.07\% & 45.58\% \\
+					aya-expanse-8b & 40.74\% & 49.0\% & 44.51\% & 52.07\% & 45.58\% \\
 					Qwen2.5 & 41.48\% & 52.0\% & 43.35\% & 47.92\% & 43.01\% \\
+					Gaokerena & 48.18\% &‌ 53.0\% & 43.49\% & 55.47\% &‌ 47.22\% \\
 					\hline
-					gpt-oss-20b-fa-sft & 60.0\% & 78.0\% & 62.0\% & 71.0\% & 75.0\% \\
-					\textbf{gemma-3-12b-it-fa-sft (ours)} & \textbf{58.0\%} & \textbf{74.0\%} & \textbf{76.0\%} & \textbf{70.0\%} & \textbf{76.0\%} \\
+					gpt-oss-20b-fa-sft & \textbf{60.0\%} & \textbf{78.0\%} & 62.0\% & 71.0\% & 75.0\% \\
+					gemma-3-12b-it-fa-sft & 58.0\% & 74.0\% & \textbf{76.0\%} & \textbf{70.0\%} & \textbf{76.0\%} \\
 					\hline
 				\end{tabular}
 			}
 		\end{latin}
 	\end{table}
 
-	همانطور که در جدول \ref{tab:persian-comparison} مشاهده می‌شود، مدل‌های آموزش‌دیده ما عملکرد بسیار بهتری نسبت به مدل‌های موجود فارسی دارند. مدل \lr{gemma-3-12b-it-fa-sft} با میانگین دقت ۷۰.۸ درصد، بهترین عملکرد کلی را در بین تمام مدل‌های فارسی ارائه داده است.
+	همانطور که در جدول \ref{tab:persian-comparison} مشاهده می‌شود، مدل‌های آموزش‌دیده ما عملکرد بسیار بهتری نسبت به مدل‌های موجود فارسی دارند. مدل \lr{gemma-3-12b-it-fa-sft} با میانگین دقت \lr{70.8} درصد، بهترین عملکرد کلی را در بین تمام مدل‌های فارسی ارائه داده است.
 
 	\section{انتخاب مدل برتر فارسی}
 	\subsection{معیارهای انتخاب}
@@ -993,7 +994,7 @@
 	\textbf{در بخش آموزش انگلیسی:}
 	\begin{itemize}
 		\item سه مدل \lr{Aya-expanse-8b}، \lr{Gemma-2-9B} و \lr{Gemma-3-12B} ارزیابی و آموزش داده شدند
-		\item مدل \lr{Gemma-3-12B} با بهینه‌سازی پارامترهای \lr{LoRA} (\lr{rank=32}, \lr{alpha=32}) و فیلترکردن داده‌ها به دقت ۷۷.۳ درصد رسید
+		\item مدل \lr{Gemma-3-12B} با بهینه‌سازی پارامترهای \lr{LoRA} (\lr{rank=32}, \lr{alpha=32}) و فیلترکردن داده‌ها به دقت \lr{77.3} درصد رسید
 		\item مدل نهایی \lr{gemma-3-12b-it-en-sft} تولید شد
 	\end{itemize}
 
