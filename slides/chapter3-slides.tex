@@ -1,0 +1,556 @@
+% Chapter 3: Supervised Fine-Tuning
+
+\begin{frame}{Chapter 3: Supervised Fine-Tuning}
+    \begin{center}
+        \Large{\textbf{Chapter 3}}\\
+        \vspace{0.5em}
+        \huge{\textbf{Supervised Fine-Tuning}}\\
+        \vspace{0.5em}
+        \large{Adapting Large Language Models for Medical Applications}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Chapter 3 Overview}
+    \begin{columns}[T]
+        \column{0.5\textwidth}
+        \textbf{Part 1: English Training}
+        \begin{itemize}
+            \item Dataset selection and preparation
+            \item Initial model evaluation
+            \item LoRA parameter optimization
+            \item Dataset quality optimization
+            \item Final training and evaluation
+        \end{itemize}
+        
+        \column{0.5\textwidth}
+        \textbf{Part 2: Persian Training}
+        \begin{itemize}
+            \item Motivation and necessity
+            \item MF3QA dataset introduction
+            \item Model selection criteria
+            \item Training configuration
+            \item Results and comparison
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{3.1 Introduction}
+    \textbf{Supervised Fine-Tuning:}
+    \begin{itemize}
+        \item Key technique for optimizing LLMs for specialized applications
+        \item Enables adaptation of pre-trained models to specific domains
+    \end{itemize}
+    
+    \vspace{0.5em}
+    
+    \textbf{Chapter Objectives:}
+    \begin{itemize}
+        \item Adapt pre-trained models to medical domain
+        \item Fine-tune four models: Aya-expanse-8b, Gemma-2-9B, Gemma-3-12B-IT, gpt-oss-20b
+        \item Train on both English and Persian medical data
+        \item Optimize LoRA parameters for efficient training
+        \item Evaluate and compare performance comprehensively
+    \end{itemize}
+\end{frame}
+
+% PART 1: ENGLISH TRAINING
+\begin{frame}[plain]
+    \begin{center}
+        \Large{\textbf{Part 1}}\\
+        \vspace{0.5em}
+        \huge{\textbf{English Training}}\\
+    \end{center}
+\end{frame}
+
+\begin{frame}{3.2 English Dataset Selection}
+    \textbf{Dataset Quality Importance:}
+    \begin{quote}
+        "Garbage in, garbage out" - High-quality training data forms the foundation of any successful model
+    \end{quote}
+    
+    \vspace{0.5em}
+    
+    \textbf{Primary Dataset: UltraMedical}
+    \begin{itemize}
+        \item Initial size: 410,000 medical instructions
+        \item Comprehensive coverage of medical topics
+        \item Filtered version: 200,000 high-quality samples
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{English Training Datasets}
+    \begin{table}[h]
+        \centering
+        \footnotesize
+        \caption{Table 3.1: English Training Datasets}
+        \begin{tabular}{lccc}
+            \toprule
+            \textbf{Name} & \textbf{Instructions} & \textbf{Filtered} & \textbf{In-dataset} \\
+            \midrule
+            MedQA & 10.2K & 9.3K & No \\
+            MedMCQA & 183K & 59K & Yes \\
+            MedQA-Eval & 51.8K & 51.8K & Yes \\
+            TextBookQA & 91.7K & 91.7K & No \\
+            PubmedQA & 211K & 88.7K & Yes \\
+            Chatdoctor & 100K & 31.1K & No \\
+            MedQuad & 47K & 6K & No \\
+            MedInstruct-52k & 52K & 23K & No \\
+            MedInstruct-120k & 120K & 25K & No \\
+            WikiInstruct & 23K & 23K & No \\
+            \rowcolor{highlight!20} UltraMedical & 410K & 410K & – \\
+            \rowcolor{improvement!20} Our dataset (filtered) & 410K & 200K & – \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\begin{frame}{3.3 Initial Model Evaluation}
+    \textbf{Evaluation Methodology:}
+    \begin{itemize}
+        \item Four models supporting Persian language evaluated
+        \item Used lm-evaluation-harness package for standardized benchmarking
+        \item Manual evaluation for Gemma-3-12b-it and gpt-oss-20b
+    \end{itemize}
+    
+    \vspace{0.5em}
+    
+    \textbf{Evaluation Datasets:}
+    \begin{itemize}
+        \item HeadQA: 2,505 medical multiple-choice questions
+        \item MedQA: 1,257 USMLE exam questions
+        \item MedMCQA: 3,978 samples from 194K+ questions
+        \item MMLU subsets: Anatomy, Clinical Knowledge, College Medicine, Medical Genetics, Professional Medicine
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Initial Evaluation Results}
+    \begin{table}[h]
+        \centering
+        \tiny
+        \caption{Table 3.3: Initial Model Evaluation Results (\%)}
+        \resizebox{\textwidth}{!}{
+	        \begin{tabular}{l|cccccccc}
+	            \toprule
+	            \textbf{Model} & \textbf{HeadQA} & \textbf{MedQA} & \textbf{MedMCQA} & \textbf{Anat.} & \textbf{C-K} & \textbf{C-M} & \textbf{MG} & \textbf{PM} \\
+	            \midrule
+	            aya-23-8B & 37.21 & 31.62 & 31.52 & 39.26 & 41.77 & 45.40 & 40.40 & 34.83 \\
+	            aya-expanse-8b & 44.67 & 34.69 & 34.46 & 34.44 & 51.81 & 43.15 & 42.42 & 44.57 \\
+	            Gemma-2-2b-it & 37.72 & 29.12 & 31.07 & 31.85 & 41.77 & 36.30 & 37.37 & 32.21 \\
+	            Gemma-2-9b-it & 58.00 & 46.66 & 42.08 & 51.11 & 60.64 & 62.33 & 60.61 & 60.30 \\
+	            \rowcolor{highlight!20} Gemma-3-12b-it & 70.97 & 65.06 & 55.23 & 65.80 & 75.10 & 75.39 & 78.82 & 78.64 \\
+	            \bottomrule
+	        \end{tabular}
+    	}
+    \end{table}
+    
+    \begin{center}
+        \colorbox{highlight!20}{\textbf{Gemma-3-12b-it selected as primary model for English training}}
+    \end{center}
+\end{frame}
+
+\begin{frame}{3.4 Initial Testing with Default Configuration}
+    \textbf{Initial Configuration:}
+    \begin{columns}[T]
+        \column{0.5\textwidth}
+        \begin{itemize}
+            \item LoRA rank: 16
+            \item LoRA alpha: 16
+            \item Training data: UltraMedical (410K)
+            \item Epochs: 1
+            \item Learning rate: 2e-4
+            \item Batch size: 32
+        \end{itemize}
+        
+        \column{0.5\textwidth}
+        \textbf{Results:}
+        \begin{itemize}
+            \item Aya-expanse-8b: <1\% improvement
+            \item Gemma-2-9b: <1\% improvement
+            \item Gemma-3-12b: 1.3\% average improvement
+            \item \textcolor{red}{Below expectations!}
+        \end{itemize}
+    \end{columns}
+    
+    \vspace{0.5em}
+    
+    \begin{center}
+        \textbf{Conclusion:} Need to optimize LoRA parameters and data quality
+    \end{center}
+\end{frame}
+
+\begin{frame}{3.5 LoRA Parameter Optimization}
+    \textbf{Optimization Methodology:}
+    \begin{itemize}
+        \item Fast testing on Aya-Expanse-8B with 50K samples subset
+        \item Testing rank/alpha combinations: 16, 32, 64, 128
+        \item Evaluation on MedQA accuracy
+    \end{itemize}
+    
+    \vspace{0.5em}
+    
+    \begin{table}[h]
+        \centering
+        \small
+        \caption{Table 3.7: LoRA Parameter Test Results}
+        \begin{tabular}{l|ccc}
+            \toprule
+            \textbf{Rank-Alpha} & \textbf{(k,q,v,o)} & \textbf{(k,q,v,o,up,down,gate)} & \textbf{(all)} \\
+            \midrule
+            16-16 & 51.0\% & 53.7\% & \textcolor{improvement}{55.41\%} \\
+            32-32 & 50.6\% & 50.36\% & 52.7\% \\
+            64-64 & 50.2\% & 50.0\% & 50.5\% \\
+            128-128 & 48.21\% & 43.27\% & 42.40\% \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    
+    \textbf{Key Finding:} rank=32, alpha=32 selected for full training
+\end{frame}
+
+\begin{frame}{3.6 Dataset Optimization}
+    \textbf{Data Filtering Process:}
+    \begin{columns}[T]
+        \column{0.6\textwidth}
+        \textbf{Filtering Criteria:}
+        \begin{itemize}
+            \item Remove incorrect/ambiguous answers
+            \item Remove duplicate questions
+            \item Remove unreliable sources
+            \item Remove off-topic content
+        \end{itemize}
+        
+        \column{0.4\textwidth}
+        \textbf{Dataset Comparison:}
+        \begin{itemize}
+            \item Original: 410K samples
+            \item Quality score: 3.2/5
+            \item Filtered: 200K samples
+            \item Quality score: 4.1/5
+        \end{itemize}
+    \end{columns}
+    
+    \vspace{0.5em}
+    
+    \begin{center}
+        \colorbox{improvement!20}{\textbf{Result: 51\% reduction in size, 28\% improvement in quality}}
+    \end{center}
+\end{frame}
+
+\begin{frame}{3.7 Final English Training Configuration}
+    \begin{columns}[T]
+        \column{0.5\textwidth}
+        \textbf{Model Configuration:}
+        \begin{itemize}
+            \item Model: Gemma-3-12B-IT
+            \item Dataset: Filtered (200K)
+            \item GPU: H100 SVM 80GB
+            \item Batch size: 32
+            \item Gradient accumulation: 2
+            \item Epochs: 3
+            \item Learning rate: 2e-4
+        \end{itemize}
+        
+        \column{0.5\textwidth}
+        \textbf{LoRA Configuration:}
+        \begin{itemize}
+            \item Optimizer: adamw-8bit
+            \item Weight decay: 0.01
+            \item LR scheduler: linear
+            \item Quantization: 4bit
+            \item Target modules: all
+            \item LoRA rank: 32
+            \item LoRA alpha: 32
+            \item LoRA dropout: 0
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{3.8 English Training Results}
+    \begin{table}[h]
+        \centering
+        \footnotesize
+        \caption{Table 3.10: Performance Before and After Fine-tuning (\%)}
+        \resizebox{\textwidth}{!}{
+	        \begin{tabular}{l|cccccccc}
+	            \toprule
+	            \textbf{Model} & \textbf{HeadQA} & \textbf{MedQA} & \textbf{MedMCQA} & \textbf{Anat.} & \textbf{C-K} & \textbf{C-M} & \textbf{MG} & \textbf{PM} \\
+	            \midrule
+	            gemma-3-12b-it & 70.97 & 65.06 & 55.23 & 65.19 & 75.10 & 75.35 & 78.79 & 78.66 \\
+	            \rowcolor{improvement!20} gemma-3-12b-it-en-sft & 77.33 & 74.28 & 61.46 & 70.38 & 80.72 & 81.65 & 82.82 & 81.65 \\
+	            \midrule
+	            Improvement & +6.36 & +9.22 & +6.23 & +5.19 & +5.62 & +6.30 & +4.03 & +2.99 \\
+	            \bottomrule
+	        \end{tabular}
+        }
+    \end{table}
+    
+    \begin{center}
+        \Large{\textbf{Achievement:}}\\
+        \textbf{Average improvement: 7.6\%}\\
+        \textbf{Final average accuracy: 77.3\%}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Comparison with Other English Medical Models}
+    \begin{table}[h]
+        \centering
+        \tiny
+        \caption{Table 3.11: Comparison with Other English Medical Models}
+        \begin{tabular}{l|c}
+            \toprule
+            \textbf{Model} & \textbf{Average Accuracy (\%)} \\
+            \midrule
+            Yi-6B-Chat & 54.8 \\
+            Openchat\_3.5 & 57.0 \\
+            Mistral-7B-v0.1 & 56.3 \\
+            Llama-3-8B-Instruct & 63.9 \\
+            Yi-9B & 59.2 \\
+            SOLAR-10.7B-Instruct & 55.4 \\
+            Medalpaca-7b & 44.8 \\
+            MMedLM2 & 55.8 \\
+            BioMistral SLERP & 53.3 \\
+            Meditron-7B & 30.8 \\
+            Llama3-Aloe-8B-Alpha & 66.0 \\
+            PMC LLaMA 13B & 54.6 \\
+            \rowcolor{improvement!20} \textbf{gemma-3-12b-it-en-sft (ours)} & \textbf{77.3} \\
+            \midrule
+            Llama-3-70B-Instruct & 76.7 \\
+            Meditron 70B & 52.1 \\
+            Qwen1.5-72B-Chat & 67.1 \\
+            Yi-34B-Chat & 66.8 \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+% PART 2: PERSIAN TRAINING
+\begin{frame}[plain]
+    \begin{center}
+        \Large{\textbf{Part 2}}\\
+        \vspace{0.5em}
+        \huge{\textbf{Persian Training}}\\
+    \end{center}
+\end{frame}
+
+\begin{frame}{3.9 Persian Training Motivation}
+    \textbf{Necessity:}
+    \begin{itemize}
+        \item Lack of specialized Persian medical models
+        \item Limited Persian medical resources
+        \item Need for culturally appropriate medical AI
+    \end{itemize}
+    
+    \vspace{0.5em}
+    
+    \textbf{Approach:}
+    \begin{itemize}
+        \item Continue from English-trained models (transfer learning)
+        \item Leverage English medical knowledge for Persian adaptation
+        \item Address Persian-specific medical terminology and context
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{3.10 Persian Dataset: MF3QA}
+    \textbf{First comprehensive Persian medical QA dataset:}
+    
+    \vspace{0.5em}
+    
+    \begin{columns}[T]
+        \column{0.5\textwidth}
+        \textbf{Dataset Composition:}
+        \begin{itemize}
+            \item 20,000 training samples
+            \item 2,000 development samples
+            \item 2,000 test samples
+        \end{itemize}
+        
+        \column{0.5\textwidth}
+        \textbf{Training Strategy:}
+        \begin{itemize}
+            \item Merge train + dev = 22K samples
+            \item Use test set for evaluation
+            \item Focus on quality over quantity
+        \end{itemize}
+    \end{columns}
+    
+    \vspace{1em}
+    
+    \textbf{Evaluation Datasets:}
+    \begin{itemize}
+        \item Persian translations of MMLU medical subsets
+        \item Same 5 categories as English evaluation
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{3.11 Persian Model Selection}
+    \textbf{Selection Criteria:}
+    \begin{itemize}
+        \item Persian language support capability
+        \item Acceptable performance in initial evaluations
+        \item Good English training results (if previously trained)
+    \end{itemize}
+    
+    \vspace{0.5em}
+    
+    \textbf{Selected Models:}
+    \begin{enumerate}
+        \item \textbf{gpt-oss-20b}: High capacity model with good Persian support
+        \item \textbf{Gemma-3-12b-it}: Best performer in English training
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{3.12 Persian Training Configuration}
+    \textbf{Key Differences from English Training:}
+    \begin{itemize}
+        \item Much smaller dataset (22K vs 200K)
+        \item Lower LoRA parameters to prevent overfitting
+        \item rank=4, alpha=8 (vs rank=32, alpha=32 for English)
+    \end{itemize}
+    
+    \vspace{0.5em}
+    
+    \begin{columns}[T]
+        \column{0.5\textwidth}
+        \textbf{Gemma-3-12B Configuration:}
+        \begin{itemize}
+            \item Dataset: MF3QA (22K)
+            \item LoRA rank: 4
+            \item LoRA alpha: 8
+            \item Epochs: 3
+            \item Batch size: 32
+        \end{itemize}
+        
+        \column{0.5\textwidth}
+        \textbf{GPT-OSS-20B Configuration:}
+        \begin{itemize}
+            \item Dataset: MF3QA (22K)
+            \item LoRA rank: 4
+            \item LoRA alpha: 8
+            \item Epochs: 3
+            \item Batch size: 64
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{3.13 Persian Training Results}
+    \begin{table}[h]
+        \centering
+        \small
+        \caption{Table 3.15: Persian Model Performance (\%)}
+        \resizebox{\textwidth}{!}{
+	        \begin{tabular}{l|ccccc}
+	            \toprule
+	            \textbf{Model} & \textbf{Anatomy} & \textbf{Clinical} & \textbf{College} & \textbf{Genetics} & \textbf{Prof.} \\
+	            \midrule
+	            gpt-oss-20b (baseline) & 57 & 69 & 59 & 75 & 73 \\
+	            gpt-oss-20b-fa-sft & 60 & 71 & 62 & 78 & 75 \\
+	            \rowcolor{improvement!20} Improvement & +3 & +2 & +3 & +3 & +2 \\
+	            \midrule
+	            gemma-3-12b-it (baseline) & 56 & 68 & 74 & 72 & 74 \\
+	            gemma-3-12b-it-fa-sft & 58 & 70 & 76 & 74 & 76 \\
+	            \rowcolor{improvement!20} Improvement & +2 & +2 & +2 & +2 & +2 \\
+	            \bottomrule
+	        \end{tabular}
+    	}
+    \end{table}
+    
+    \begin{center}
+        \textbf{Average improvement: 2.5\%} (acceptable given limited data)
+    \end{center}
+\end{frame}
+
+\begin{frame}{Comparison with Other Persian Models}
+    \begin{table}[h]
+        \centering
+        \small
+        \caption{Table 3.16: Comparison with Other Persian Models (\%)}
+        \begin{tabular}{l|ccccc|c}
+            \toprule
+            \textbf{Model} & \textbf{Anat.} & \textbf{Gen.} & \textbf{Col.} & \textbf{Clin.} & \textbf{Prof.} & \textbf{Avg.} \\
+            \midrule
+            PersianMind & 25.18 & 34.0 & 20.23 & 25.28 & 23.89 & 25.7 \\
+            aya-expanse-8b & 40.74 & 49.0 & 44.51 & 52.07 & 45.58 & 46.4 \\
+            Qwen2.5 & 41.48 & 52.0 & 43.35 & 47.92 & 43.01 & 45.6 \\
+            gpt-oss-20b-fa-sft & 60.0 & 78.0 & 62.0 & 71.0 & 75.0 & 69.2 \\
+            \rowcolor{improvement!20} gemma-3-12b-it-fa-sft & 58.0 & 74.0 & 76.0 & 70.0 & 76.0 & \textbf{70.8} \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    
+    \begin{center}
+        \colorbox{improvement!20}{\textbf{25-30\% improvement over existing Persian models}}
+    \end{center}
+\end{frame}
+
+\begin{frame}{3.14 Comprehensive English vs Persian Comparison}
+    \begin{table}[h]
+        \centering
+        \caption{Table 3.17: Training Comparison}
+        \begin{tabular}{lcc}
+            \toprule
+            \textbf{Aspect} & \textbf{English Training} & \textbf{Persian Training} \\
+            \midrule
+            Training Data Size & 200K samples & 22K samples \\
+            LoRA rank & 32 & 4 \\
+            LoRA alpha & 32 & 8 \\
+            Batch size (Gemma) & 32 & 32 \\
+            Gradient accumulation & 2 & 1 \\
+            Average Improvement & 7.6\% & 2.5\% \\
+            Final Accuracy & 77.3\% & 70.8\% \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+    
+    \begin{center}
+        \textbf{Key Insight:} Data volume significantly impacts achievable improvement,\\
+        but careful parameter tuning can optimize results even with limited data
+    \end{center}
+\end{frame}
+
+\begin{frame}{3.15 Chapter Summary}
+    \textbf{English Training Achievements:}
+    \begin{itemize}
+        \item Evaluated three models: Aya-expanse-8b, Gemma-2-9B, Gemma-3-12B
+        \item Optimized LoRA parameters (rank=32, alpha=32)
+        \item Filtered dataset from 410K to 200K high-quality samples
+        \item Final model \textbf{gemma-3-12b-it-en-sft}: 77.3\% accuracy
+    \end{itemize}
+    
+    \vspace{0.5em}
+    
+    \textbf{Persian Training Achievements:}
+    \begin{itemize}
+        \item Trained gpt-oss-20b and Gemma-3-12b-it models
+        \item Used conservative LoRA (rank=4, alpha=8) to prevent overfitting
+        \item Final model \textbf{gemma-3-12b-it-fa-sft}: 70.8\% accuracy
+        \item 25-30\% improvement over existing Persian medical models
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Key Contributions and Next Steps}
+    \textbf{Methodological Contributions:}
+    \begin{itemize}
+        \item Demonstrated effective combination of:
+        \begin{itemize}
+            \item 4-bit quantization
+            \item Optimized LoRA parameters
+            \item Data quality filtering
+            \item Multi-stage training
+            \item Language-specific parameter tuning
+        \end{itemize}
+    \end{itemize}
+    
+    \vspace{0.5em}
+    
+    \textbf{Final Models for RAG System (Chapter 4):}
+    \begin{itemize}
+        \item \textbf{English}: gemma-3-12b-it-en-sft
+        \item \textbf{Persian}: gemma-3-12b-it-fa-sft
+    \end{itemize}
+    
+    \vspace{0.5em}
+    
+    \begin{center}
+        \colorbox{highlight!20}{\textbf{Successfully adapted LLMs for medical domain in both languages}}
+    \end{center}
+\end{frame}
