@@ -9,28 +9,10 @@
         \vspace{0.5em}
         \large{Ensuring Safety in Medical AI Systems}
     \end{center}
-\end{frame}
-
-\begin{frame}{5.1 Introduction}
-    \textbf{Guardrails in Medical AI:}
-    \begin{itemize}
-        \item Critical protective layer for medical assistants
-        \item Prevents harmful, incorrect, or unethical content
-        \item Ensures compliance with medical standards
-    \end{itemize}
     
-    \vspace{1em}
+    \vspace{0.5em}
     
-    \textbf{Key Objectives:}
-    \begin{itemize}
-        \item Input filtering
-        \item Output monitoring
-        \item Specialized medical policies enforcement
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{5.2 Medical Domain Challenges}
-    \textbf{Specific Challenges:}
+    \textbf{Medical Domain Challenges:}
     \begin{itemize}
         \item \textbf{Unauthorized diagnosis:} System must not replace doctors
         \item \textbf{Drug prescriptions:} No specific treatment recommendations
@@ -38,89 +20,82 @@
         \item \textbf{Emergency situations:} Proper escalation procedures
         \item \textbf{Drug interactions:} Preventing dangerous advice
     \end{itemize}
-    
-    \vspace{0.5em}
-    
-    \textbf{Implementation Goals:}
-    \begin{itemize}
-        \item User protection
-        \item System credibility
-        \item Legal compliance
-        \item Risk management
-        \item Trust building
-    \end{itemize}
 \end{frame}
 
-\begin{frame}{5.3 Guardrails Architecture}
-    \textbf{Multi-layer Architecture:}
-    
-    \begin{center}
-    \begin{tikzpicture}[node distance=1.5cm]
-        \node[rectangle,draw,fill=blue!20] (input) {User Input};
-        \node[rectangle,draw,fill=red!20,below of=input] (inputguard) {Input Guardrails};
-        \node[rectangle,draw,fill=green!20,below of=inputguard] (model) {Main Model + RAG};
-        \node[rectangle,draw,fill=red!20,below of=model] (outputguard) {Output Guardrails};
-        \node[rectangle,draw,fill=blue!20,below of=outputguard] (output) {Safe Response};
-        
-        \draw[->] (input) -- (inputguard);
-        \draw[->] (inputguard) -- (model);
-        \draw[->] (model) -- (outputguard);
-        \draw[->] (outputguard) -- (output);
-    \end{tikzpicture}
-    \end{center}
-    
-    \vspace{0.5em}
-    Key Components:
-    \begin{itemize}
-        \item Input validation layer
-        \item Main processing (Fine-tuned model + RAG)
-        \item Output validation layer
-        \item Security logging system
-    \end{itemize}
+\begin{frame}{Guardrails Architecture and Input Policies}
+	\begin{columns}[T]
+		\column{0.5\textwidth}
+		\textbf{Multi-layer Architecture:}
+		\begin{center}
+			\begin{tikzpicture}[node distance=1cm, scale=0.8, transform shape]
+				\node[rectangle,draw,fill=blue!20] (input) {User Input};
+				\node[rectangle,draw,fill=red!20,below of=input] (inputguard) {Input Guard};
+				\node[rectangle,draw,fill=green!20,below of=inputguard] (model) {Model + RAG};
+				\node[rectangle,draw,fill=red!20,below of=model] (outputguard) {Output Guard};
+				\node[rectangle,draw,fill=blue!20,below of=outputguard] (output) {Safe Response};
+				
+				\draw[->] (input) -- (inputguard);
+				\draw[->] (inputguard) -- (model);
+				\draw[->] (model) -- (outputguard);
+				\draw[->] (outputguard) -- (output);
+			\end{tikzpicture}
+		\end{center}
+		
+		\column{0.5\textwidth}
+		\textbf{Nine Input Controls:}
+		\begin{enumerate}
+			\footnotesize
+			\item No personal diagnosis requests
+			\item Protection of safety rules
+			\item Emergency situation management
+			\item Sensitive content filtering
+			\item Abusive language prevention
+			\item PHI protection
+			\item Identity impersonation prevention
+			\item System security
+			\item Malicious code blocking
+		\end{enumerate}
+	\end{columns}
+	
+	\vspace{0.5em}
+	\begin{center}
+		\colorbox{red!20}{\textbf{Blocks inappropriate requests before processing}}
+	\end{center}
 \end{frame}
 
-\begin{frame}{5.4 Input Security Policies}
-    \textbf{Nine Key Input Controls:}
-    
+
+\begin{frame}{Output Policies and Technical Challenges}
+    \textbf{Eight Core Output Criteria:}
     \begin{columns}[T]
         \column{0.5\textwidth}
-        \begin{enumerate}
-            \item No personal diagnosis requests
-            \item Protection of safety rules
-            \item Emergency situation management
-            \item Sensitive content filtering
-            \item Abusive language prevention
-        \end{enumerate}
+        \begin{itemize}
+            \footnotesize
+            \item \textbf{Harm prevention:} No dangerous advice
+            \item \textbf{Professional disclaimer:} Not doctor replacement
+            \item \textbf{Treatment limitations:} No specific recommendations
+            \item \textbf{Information accuracy:} No misinformation
+        \end{itemize}
         
         \column{0.5\textwidth}
-        \begin{enumerate}
-            \setcounter{enumi}{5}
-            \item PHI protection
-            \item Identity impersonation prevention
-            \item System security
-            \item Malicious code blocking
-        \end{enumerate}
+        \begin{itemize}
+            \footnotesize
+            \item \textbf{Self-diagnosis prevention:} No self-treatment
+            \item \textbf{Evidence-based:} Avoid unverified claims
+            \item \textbf{Appropriate tone:} Clear, empathetic
+            \item \textbf{Proper referrals:} Direct to professionals
+        \end{itemize}
     \end{columns}
     
     \vspace{0.5em}
     
-    \begin{center}
-        \colorbox{red!20}{\textbf{Blocks inappropriate requests before processing}}
-    \end{center}
-\end{frame}
-
-\begin{frame}{5.5 Output Security Policies}
-    \textbf{Eight Core Output Criteria:}
-    
+    \textbf{Implementation Challenges:}
     \begin{itemize}
-        \item \textbf{Harm prevention:} No dangerous medical advice
-        \item \textbf{Professional disclaimer:} Not a doctor replacement
-        \item \textbf{Treatment limitations:} No specific recommendations
-        \item \textbf{Information accuracy:} No medical misinformation
-        \item \textbf{Self-diagnosis prevention:} No encouragement of self-treatment
-        \item \textbf{Evidence-based:} Avoid unverified claims
-        \item \textbf{Appropriate tone:} Clear, empathetic, cautious
-        \item \textbf{Proper referrals:} Direct to professionals when needed
+        \item Balance between safety and usability
+        \item \textcolor{red}{\textbf{176\% increase in response time}} (additional 730ms)
+        \item Comprehensive scenario coverage
+        \item Bilingual support (Persian/English)
+        \item Context detection challenges
+        \item Increased computational load
     \end{itemize}
     
     \begin{center}
@@ -128,27 +103,7 @@
     \end{center}
 \end{frame}
 
-\begin{frame}{5.6 Technical Challenges}
-    \textbf{Implementation Challenges:}
-    \begin{itemize}
-        \item Balance between safety and usability
-        \item \textcolor{red}{176\% increase in response time} (additional 730ms)
-        \item Comprehensive scenario coverage
-        \item Bilingual support (Persian/English)
-    \end{itemize}
-    
-    \vspace{0.5em}
-    
-    \textbf{Current Limitations:}
-    \begin{itemize}
-        \item Context detection challenges
-        \item Increased computational load
-        \item Need for continuous policy updates
-        \item Cultural adaptation requirements
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{5.7 Optimization Strategies}
+\begin{frame}{Optimization Strategies and Summary}
     \begin{columns}[T]
         \column{0.5\textwidth}
         \textbf{Performance Optimization:}
@@ -169,7 +124,24 @@
         \end{itemize}
     \end{columns}
     
-    \vspace{1em}
+    \vspace{0.5em}
+    
+    \textbf{Key Achievements:}
+    \begin{itemize}
+        \item Comprehensive medical safety framework implemented
+        \item 17 total policies (9 input + 8 output)
+        \item Bilingual support for Persian and English
+        \item Critical protective layer for medical AI deployment
+    \end{itemize}
+    
+    \vspace{0.5em}
+    
+    \textbf{Current Limitations:}
+    \begin{itemize}
+        \item \textcolor{red}{176\% latency increase} needs optimization
+        \item Need for continuous policy updates
+        \item Cultural adaptation requirements
+    \end{itemize}
     
     \begin{center}
         \colorbox{highlight!20}{\textbf{Goal: Reduce latency while maintaining safety}}

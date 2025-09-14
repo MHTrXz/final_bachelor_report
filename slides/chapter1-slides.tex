@@ -1,137 +1,46 @@
 % Chapter 1: Introduction
 
-\begin{frame}{Chapter 1: Introduction}
-    \begin{center}
-        \Large{\textbf{Chapter 1}}\\
-        \vspace{0.5em}
-        \huge{\textbf{Introduction}}\\
-        \vspace{0.5em}
-        \large{Persian Medical Assistant Based on Large Language Models}
-    \end{center}
-\end{frame}
-
-\begin{frame}{Recent Advances in LLMs}
-    \textbf{Significant Progress in Large Language Models:}
+\begin{frame}{Introduction \& Objectives}
+    \textbf{Persian Medical Assistant Based on Large Language Models}
     \begin{itemize}
-        \item Deep architectures and extensive text data enable natural language understanding
-        \item Models like GPT, LLaMA, and T5 perform diverse tasks with just prompts
-        \item Remarkable capabilities in general language tasks
-    \end{itemize}
-    
-    \vspace{0.5em}
-    
-    \textbf{Challenges in Specialized Applications:}
-    \begin{itemize}
-        \item Limited access to organizational and up-to-date specialized data
-        \item Risk of inaccurate or dangerous responses in sensitive domains
-        \item Particularly critical in healthcare and legal applications
+        \item \textbf{Goal:} Design and implement an intelligent assistant for Persian medical language understanding and specialized response generation.
+        \item \textbf{Features:}
+        \begin{itemize}
+            \item Accurate, context-aware answers
+            \item Access to up-to-date and organizational data
+            \item Safety mechanisms and quality control
+            \item Adaptability to healthcare, education, and more
+        \end{itemize}
+        \item \textbf{Innovation:} Dual-track development—English model with Persian support and a dedicated Persian model, enabling comparative analysis.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{1.1 Project Objectives}
-    \textbf{Goal:} Design and implement a medical language understanding assistant based on LLMs
-    
-    \vspace{0.5em}
-    
-    \textbf{Key Features:}
+\begin{frame}{Related Work}
+    \textbf{Key Research Areas:}
     \begin{itemize}
-        \item \textbf{Accurate Responses:} Specialized content-appropriate answers
-        \item \textbf{Knowledge Base Access:} Internal organizational data integration
-        \item \textbf{Safety Mechanisms:} Control and filtering for quality assurance
-        \item \textbf{Domain Adaptability:} Healthcare, education, customer support
+        \item Large Language Models (LLMs): GPT, LLaMA, T5
+        \item Domain adaptation and supervised fine-tuning for medical applications
+        \item Retrieval-Augmented Generation (RAG) methods
+        \item AI for healthcare and medical information systems
+        \item Multilingual and Persian-specific language modeling
+        \item Safety, guardrails, and response filtering in sensitive domains
+        \item Integration of organizational data with LLMs
     \end{itemize}
-    
-    \vspace{0.5em}
-    
-    \textbf{Three Main Components:}
+\end{frame}
+
+\begin{frame}{Project Structure}
+    \textbf{Dual Development Tracks:}
+    \begin{itemize}
+        \item English-based model (with Persian support)
+        \item Dedicated Persian model
+    \end{itemize}
+    \vspace{1em}
+    \textbf{Main Components:}
     \begin{enumerate}
         \item Fine-tuning with specialized medical data
-        \item RAG architecture for internal knowledge base
-        \item Control mechanisms for safety and accuracy
+        \item RAG (Retrieval-Augmented Generation) architecture for internal knowledge base
+        \item Safety and control mechanisms (Guardrails)
     \end{enumerate}
-\end{frame}
-
-\begin{frame}{1.2 Dual-Track Project Structure}
-    \textbf{Two Parallel Development Paths:}
-    
     \vspace{1em}
-    
-    \begin{columns}[T]
-        \column{0.5\textwidth}
-        \textbf{Track 1: English Model}
-        \begin{itemize}
-            \item English model with Persian support
-            \item Fine-tuning on English medical data
-            \item RAG implementation for bilingual environments
-            \item Primary development path
-        \end{itemize}
-        
-        \column{0.5\textwidth}
-        \textbf{Track 2: Persian Model}
-        \begin{itemize}
-            \item Dedicated Persian model development
-            \item Persian-specific fine-tuning
-            \item Persian information retrieval
-            \item Comparative evaluation
-        \end{itemize}
-    \end{columns}
-    
-    \vspace{1em}
-    
-    \begin{center}
-        \colorbox{highlight!20}{Enables comparison and analysis of both approaches}
-    \end{center}
-\end{frame}
-
-\begin{frame}{1.3 Report Structure}
-    \begin{enumerate}
-        \item \textbf{Chapter 2: Literature Review}
-        \begin{itemize}
-            \item Research on LLMs for specialized applications
-            \item Medical and organizational domain studies
-        \end{itemize}
-        
-        \item \textbf{Chapter 3: Model Fine-Tuning}
-        \begin{itemize}
-            \item Dataset selection and preparation
-            \item Base model tuning and evaluation
-        \end{itemize}
-        
-        \item \textbf{Chapter 4: RAG Architecture}
-        \begin{itemize}
-            \item Internal knowledge base implementation
-            \item Retrieval system design
-        \end{itemize}
-        
-        \item \textbf{Chapter 5: Security Mechanisms (Guardrails)}
-        \begin{itemize}
-            \item Filtering methods and safety analysis
-            \item Inaccurate response detection
-        \end{itemize}
-        
-        \item \textbf{Chapter 6: Conclusion}
-        \begin{itemize}
-            \item Final analysis and future research suggestions
-        \end{itemize}
-    \end{enumerate}
-\end{frame}
-
-\begin{frame}{Project Significance}
-    \textbf{Key Contributions:}
-    \begin{itemize}
-        \item First comprehensive Persian medical LLM assistant
-        \item Novel dual-track development approach
-        \item Integration of multiple state-of-the-art techniques
-        \item Practical deployment-ready solution
-    \end{itemize}
-    
-    \vspace{1em}
-    
-    \textbf{Expected Impact:}
-    \begin{itemize}
-        \item Improved medical information access for Persian speakers
-        \item Framework for specialized LLM applications
-        \item Advancement in multilingual medical AI
-        \item Safe and reliable AI assistant for healthcare
-    \end{itemize}
+    \textbf{Outcome:} The first practical Persian LLM medical assistant with advanced safety features and real-world applicability.
 \end{frame}

@@ -6,298 +6,47 @@
         \vspace{0.5em}
         \huge{\textbf{Literature Review}}\\
         \vspace{0.5em}
-        \large{Research on Medical AI Assistants Based on LLMs}
+        \large{Key Developments in Medical LLMs and Persian AI}
     \end{center}
 \end{frame}
 
-\begin{frame}{2.1 Dual Approaches}
-    \textbf{Initial Development:}
+\begin{frame}{Medical LLMs \& Persian Research}
+    \textbf{A. Advances in Medical LLMs}
     \begin{itemize}
-        \item Most research based on English models with limited Persian support
-        \item Challenges specific to Persian language and specialized data
+        \item Transformer-based models: GPT, PaLM, Gemma, Med-PaLM
+        \item Specialized models: Med-PaLM 2, MEDITRON, BioMistral, Aloe Family, Meerkat
+        \item Retrieval-Augmented Generation (RAG) to enhance factuality
+        \item Fine-tuning: Supervised, LoRA/QLoRA/DLoRA for efficiency
+        \item Advanced reasoning: Chain-of-Thought, Tree of Thoughts, self-consistency
     \end{itemize}
-    
     \vspace{0.5em}
-    
-    \textbf{Our Dual-Track Approach:}
-    \begin{columns}[T]
-        \column{0.5\textwidth}
-        \textbf{Main Track:}
-        \begin{itemize}
-            \item English models with Persian support
-            \item Leverage existing resources
-            \item Cross-lingual transfer
-        \end{itemize}
-        
-        \column{0.5\textwidth}
-        \textbf{Dedicated Track:}
-        \begin{itemize}
-            \item Persian-specific development
-            \item Native language optimization
-            \item Comparative evaluation
-        \end{itemize}
-    \end{columns}
-    
-    \vspace{0.5em}
-    
-    \begin{center}
-        Applied in both Fine-Tuning and RAG implementation
-    \end{center}
-\end{frame}
-
-\begin{frame}{2.2 Medical Large Language Models}
-    \textbf{2.2.1 Foundation Architectures}
+    \textbf{B. Persian Medical AI}
     \begin{itemize}
-        \item \textbf{Transformer \& Attention:} Vaswani et al. - "Attention is All You Need"
-        \item Foundation for GPT, PaLM, Gemma-3-12B-IT used in this project
-    \end{itemize}
-    
-    \vspace{0.5em}
-    
-    \textbf{2.2.2 Specialized Medical Models}
-    \begin{itemize}
-        \item \textbf{Med-PaLM Series:} Singhal et al.
-        \begin{itemize}
-            \item[-] Clinical knowledge encoding
-            \item[-] Expert-level performance (Med-PaLM 2)
-        \end{itemize}
-        \item \textbf{MEDITRON:} Chen et al. - 70B model with medical pretraining
-        \item \textbf{BioMistral:} Labrak et al. - Open-source medical LLM
-        \item \textbf{Aloe Family:} Gururajan et al. - Fine-tuned health models
-        \item \textbf{Smaller Models:} Meerkat, MedMobile for resource-constrained environments
+        \item Limited research; English-centric models dominate
+        \item Introduction of MF3QA and Persian medical corpora
+        \item Growing need for native Persian solutions
     \end{itemize}
 \end{frame}
 
-\begin{frame}{2.3 Fine-Tuning Techniques}
-    \textbf{2.3.1 Supervised Fine-Tuning}
+\begin{frame}{Techniques, Tools, and Innovations}
+    \textbf{A. Core Techniques}
     \begin{itemize}
-        \item Brown et al.: Few-shot learning capabilities of LLMs
-        \item Critical for medical applications with limited training data
-        \item Foundation for supervised fine-tuning in this project
+        \item Supervised fine-tuning with domain data
+        \item RAG with late chunking for improved context
+        \item Safety and guardrails: NeMo, two-layer architecture
+        \item Preference tuning: RLHF, DPO, KTO, ORPO
     \end{itemize}
-    
     \vspace{0.5em}
-    
-    \textbf{2.3.2 Resource Optimization Techniques}
+    \textbf{B. Tools \& Infrastructures}
     \begin{itemize}
-        \item \textbf{LoRA:} Hu et al. - Low-Rank Adaptation
-        \begin{itemize}
-            \item[-] Used for Gemma-3-12B-IT fine-tuning
-            \item[-] Reduces trainable parameters
-        \end{itemize}
-        \item \textbf{QLoRA:} Dettmers et al. - Quantized LLM fine-tuning
-        \begin{itemize}
-            \item[-] 4-bit quantization + LoRA combination
-            \item[-] Enables large model training with limited resources
-        \end{itemize}
-        \item \textbf{DLoRA:} Distributed parameter-efficient fine-tuning
+        \item ElasticSearch, Guardrails, LangChain, Ollama
+        \item Unsloth, TensorBoard, Lightning.ai, Vast.ai
     \end{itemize}
-\end{frame}
-
-\begin{frame}{2.4 Retrieval-Augmented Generation (RAG)}
-    \textbf{2.4.1 Fundamental Concepts}
-    \begin{itemize}
-        \item Lewis et al.: First comprehensive RAG implementation
-        \item Solution for improving accuracy and reducing hallucinations
-        \item Foundation for RAG system in this project
-    \end{itemize}
-    
     \vspace{0.5em}
-    
-    \textbf{2.4.2 Advanced Techniques}
-    \begin{itemize}
-        \item \textbf{Graph RAG:} Edge et al. - Knowledge graphs for query-focused summarization
-        \item \textbf{LightRAG:} Guo et al. - Simple and fast RAG solution
-    \end{itemize}
-    
-    \vspace{0.5em}
-    
-    \textbf{2.4.3 Novel Chunking Approach}
-    \begin{itemize}
-        \item \textbf{Late Chunking:} Innovative technique implemented in this project
-        \item Preserves full document context during embedding
-        \item Significant improvement over traditional chunking methods
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{2.5 Persian Language Research}
-    \textbf{Current State:}
-    \begin{itemize}
-        \item Limited research on Persian medical LLMs
-        \item Most models focus on English with minimal Persian support
-        \item Recent developments in Persian medical AI
-    \end{itemize}
-    
-    \vspace{0.5em}
-    
-    \textbf{Key Resources:}
-    \begin{itemize}
-        \item \textbf{MF3QA Dataset:} First comprehensive Persian medical QA dataset
-        \begin{itemize}
-            \item[-] 20K training samples
-            \item[-] Used for model training
-        \end{itemize}
-        \item \textbf{Persian Medical Corpus:} For RAG system knowledge base
-        \item Recent publication on Persian medical model training
-    \end{itemize}
-    
-    \vspace{0.5em}
-    
-    \begin{center}
-        \colorbox{highlight!20}{Critical gap addressed by this project}
-    \end{center}
-\end{frame}
-
-\begin{frame}{2.6 Advanced Reasoning Techniques}
-    \textbf{2.6.1 Chain-of-Thought Prompting}
-    \begin{itemize}
-        \item Wei et al.: Breaking complex problems into smaller steps
-        \item Significantly improves reasoning capabilities
-    \end{itemize}
-    
-    \vspace{0.5em}
-    
-    \textbf{2.6.2 Extended Reasoning Methods}
-    \begin{itemize}
-        \item \textbf{Self-Consistency:} Wang et al. - Improved chain-of-thought
-        \item \textbf{Chain-of-Knowledge:} Li et al. - Linking with heterogeneous knowledge
-        \item \textbf{Tree of Thoughts:} Yao et al. - Deliberate problem-solving approach
-    \end{itemize}
-    
-    \vspace{0.5em}
-    
-    \textbf{2.6.3 Medical Prompt Engineering}
-    \begin{itemize}
-        \item Wang et al.: Comprehensive study on healthcare prompting
-        \item Careful prompt design significantly improves medical task performance
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{2.7 Safety Mechanisms (Guardrails)}
-    \textbf{2.7.1 NeMo Guardrails}
-    \begin{itemize}
-        \item NVIDIA's comprehensive framework for LLM control
-        \item Content filtering and response accuracy assurance
-        \item Preventing false information generation
-        \item Conversation flow control
-        \item Critical for medical applications
-    \end{itemize}
-    
-    \vspace{0.5em}
-    
-    \textbf{2.7.2 Specialized Security Patterns}
-    \begin{itemize}
-        \item \textbf{Two-Layer Architecture:} Input \& Output Guardrails
-        \item \textbf{Input Control:} Filter inappropriate requests
-        \item \textbf{Output Control:} Ensure response quality and safety
-        \item \textbf{Medical Policies:}
-        \begin{itemize}
-            \item[-] Prohibit personal medical diagnosis
-            \item[-] Control treatment recommendations
-            \item[-] Emergency situation management
-        \end{itemize}
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{2.8-2.9 Training and Evaluation}
-    \textbf{2.8 Preference Tuning Techniques}
-    \begin{itemize}
-        \item \textbf{RLHF:} Ouyang et al. - Human feedback training
-        \item \textbf{DPO:} Direct Preference Optimization
-        \item \textbf{KTO:} Kahneman-Tversky Optimization
-        \item \textbf{ORPO:} Reference-free preference optimization
-    \end{itemize}
-    
-    \vspace{0.5em}
-    
-    \textbf{2.9 Datasets and Benchmarks}
-    \begin{itemize}
-        \item \textbf{Medical Datasets:}
-        \begin{itemize}
-            \item[-] HEAD-QA: Complex health reasoning
-            \item[-] MedMCQA: Large-scale multiple-choice
-            \item[-] MedQA: Open-domain medical exams
-        \end{itemize}
-        \item \textbf{Evaluation Metrics:}
-        \begin{itemize}
-            \item[-] MMLU: Multitask language understanding
-            \item[-] PubMedQA: Biomedical research QA
-            \item[-] BERTScore: Text generation evaluation
-        \end{itemize}
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{2.10 Multilingual Models}
-
-    
-    \textbf{Bilingual Environment Challenges:}
-    \begin{itemize}
-        \item Traditional word-frequency similarity limitations
-        \item Solution: Multilingual embeddings with cosine similarity
-        \item Cross-lingual information retrieval optimization
-    \end{itemize}
-    
-    \vspace{0.5em}
-\end{frame}
-
-\begin{frame}{2.11 Tools and Technologies}
-    		\centering
-    \vspace{0.3cm}
-    % Replace these image names with your actual logo file names in the same directory (or path)
-    \includegraphics[width=2cm]{images/ollama} \hspace{0.5cm}
-    \includegraphics[width=2cm]{images/guardrils} \hspace{0.5cm}
-    \includegraphics[width=2cm]{images/elasticsearch} \hspace{0.5cm}
-    \includegraphics[width=2cm]{images/langchain}
-    
-    \vspace{0.5cm}
-    \includegraphics[width=2cm]{images/unsloth} \hspace{0.5cm}
-    \includegraphics[width=2cm]{images/tensorbooard} \hspace{0.5cm}
-    \includegraphics[width=2cm]{images/lighteningAI} \hspace{0.5cm}
-    \includegraphics[width=2cm]{images/vastAI}
-    
-    \vspace{0.4cm}
-    {\small Logos of key frameworks and tools used in the project.}
-\end{frame}
-
-\begin{frame}{2.12 Tools and Technologies}
-    \begin{columns}[T]
-        \column{0.5\textwidth}
-        \textbf{Core Infrastructure:}
-        \begin{itemize}
-            \item \textbf{ElasticSearch:} Distributed search engine
-            \item \textbf{Guardrails:} LLM constraint framework
-            \item \textbf{LangChain:} LLM application framework
-            \item \textbf{Ollama:} Local model deployment
-        \end{itemize}
-        
-        \column{0.5\textwidth}
-        \textbf{Training \& Evaluation:}
-        \begin{itemize}
-            \item \textbf{Unsloth:} Optimized deep learning
-            \item \textbf{TensorBoard:} Training visualization
-            \item \textbf{Lightning.ai:} GPU research platform
-            \item \textbf{Vast.ai:} Cloud training resources
-            \item \textbf{lm-evaluation-harness:} Model evaluation
-        \end{itemize}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{2.13 Summary and Key Innovations}
-    \textbf{Literature Review Findings:}
-    \begin{itemize}
-        \item Medical AI assistants require intelligent technique combination
-        \item Significant gap in Persian medical LLMs
-        \item Need for safe and reliable medical AI systems
-    \end{itemize}
-    
-    \vspace{0.5em}
-    
-    \textbf{Project Innovations:}
+    \textbf{C. Project Innovations}
     \begin{enumerate}
-        \item \textbf{Late Chunking Technique:} Enhanced RAG quality with full context preservation
-        \item \textbf{Two-Layer Guardrails:} Comprehensive safety in medical environment
-        \item \textbf{Optimal Technique Combination:} SFT + RAG + Guardrails integration
-        \item \textbf{Multilingual Solutions:} Persian-English environment optimization
+        \item Late chunking in RAG for full context
+        \item Two-layer guardrails for medical safety
+        \item Multilingual (Persian-English) optimization
     \end{enumerate}
-
 \end{frame}

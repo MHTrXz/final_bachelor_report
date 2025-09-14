@@ -1,4 +1,3 @@
-
 \begin{frame}{Chapter 4: RAG System Implementation}
     \begin{center}
         \Large{\textbf{Chapter 4}}\\
@@ -8,39 +7,17 @@
         \vspace{0.5em}
         \large{Bilingual Medical Knowledge Base Development}
     \end{center}
-\end{frame}
-
-\begin{frame}{4.1 Introduction to RAG}
-    \textbf{Retrieval-Augmented Generation:}
-    \begin{itemize}
-        \item Combines stored knowledge with text generation capabilities
-        \item Effective solution for LLM limitations:
-        \begin{itemize}
-            \item[-] Access to up-to-date information
-            \item[-] Reduction of hallucinations
-            \item[-] Domain-specific knowledge integration
-        \end{itemize}
-    \end{itemize}
     
-    \vspace{1em}
+    \vspace{0.5em}
     
     \textbf{Chapter Structure:}
     \begin{itemize}
-        \item \textbf{Part 1:} English RAG system implementation
-        \item \textbf{Part 2:} Bilingual system with Persian integration
+        \item \textbf{Part 1:} English RAG system with 373.5K medical chunks
+        \item \textbf{Part 2:} Bilingual system with 5.5M total chunks
     \end{itemize}
 \end{frame}
 
-% PART 1: English RAG System
-\begin{frame}[plain]
-    \begin{center}
-        \Large{\textbf{Part 1}}\\
-        \vspace{0.5em}
-        \huge{\textbf{English RAG System}}\\
-    \end{center}
-\end{frame}
-
-\begin{frame}{4.2 English Datasets}
+\begin{frame}{English Datasets and Configuration}
     \begin{table}[h]
         \centering
         \footnotesize
@@ -60,86 +37,40 @@
         \end{tabular}
     \end{table}
     
-    \begin{center}
-        \textbf{Selected:} StatePearls + Textbooks (quality over quantity)
-    \end{center}
+    \textbf{Configuration:}
+    \begin{itemize}
+        \item StatePearls: 1024 chunk size, 100 token overlap
+        \item Textbooks: 300 chunk size
+        \item Storage: Elasticsearch with hybrid search
+    \end{itemize}
 \end{frame}
 
-\begin{frame}{4.3 Late Chunking Technique}
-    \textbf{Three-Phase Process:}
+\begin{frame}{Late Chunking Technique}
+    \textbf{Traditional vs Late Chunking:}
+    \begin{itemize}
+        \item \textbf{Traditional:} Chunk → Embed → Store
+        \item \textbf{Late Chunking:} Full Document → Embed → Chunk → Store
+    \end{itemize}
     
     \vspace{0.5em}
     
-    \textbf{Phase 1: Recursive Chunking}
-    \begin{itemize}
-        \item Split by natural separators
-        \item Size control with overlap
-    \end{itemize}
+    \textbf{Three-Phase Process:}
+    \begin{enumerate}
+        \item \textbf{Recursive Chunking:} Split by natural separators with size control
+        \item \textbf{Simultaneous Vector Generation:} Process all chunks together
+        \item \textbf{Aggregation and Pooling:} Generate unified representation
+    \end{enumerate}
     
-    \textbf{Phase 2: Simultaneous Vector Generation}
-    \begin{itemize}
-        \item Process all chunks together
-        \item Preserve inter-chunk relationships
-    \end{itemize}
-    
-    \textbf{Phase 3: Aggregation and Pooling}
-    \begin{itemize}
-        \item Process entire document first
-        \item Generate unified representation
-        \item Split vector by boundaries
-    \end{itemize}
+    \vspace{0.5em}
     
     \begin{center}
-        \colorbox{highlight!20}{\textbf{Key: Full context preserved in each chunk}}
+        \colorbox{highlight!20}{\textbf{Key Benefit: Full context preserved in each chunk}}\\
+        \vspace{0.3em}
+        \colorbox{improvement!20}{\textbf{Result: 15-20\% improvement in retrieval accuracy}}
     \end{center}
 \end{frame}
 
-\begin{frame}{Late Chunking Architecture}
-    \begin{center}
-        % Placeholder for the actual image
-        \includegraphics[width=0.9\textwidth]{images/late-chunking}
-        % If image not available, use placeholder:
-        % \fbox{
-        %     \begin{minipage}{0.9\textwidth}
-        %         \centering
-        %         \vspace{3cm}
-        %         \textit{[Late Chunking Architecture Diagram]}\\
-        %         \vspace{3cm}
-        %     \end{minipage}
-        % }
-        
-        \vspace{0.5em}
-        \textbf{Traditional:} Chunk → Embed → Store\\
-        \textbf{Late Chunking:} Full Document → Embed → Chunk → Store\\
-        
-        \vspace{0.5em}
-        \colorbox{improvement!20}{15-20\% improvement in retrieval accuracy}
-    \end{center}
-\end{frame}
-
-\begin{frame}{4.4 English System Configuration}
-    \begin{columns}[T]
-        \column{0.5\textwidth}
-        \textbf{Chunking Parameters:}
-        \begin{itemize}
-            \item StatePearls: 1024 chunk size
-            \item Overlap: 100 tokens
-            \item Method: Recursive + Late
-            \item Textbooks: 300 chunk size
-        \end{itemize}
-        
-        \column{0.5\textwidth}
-        \textbf{Storage Architecture:}
-        \begin{itemize}
-            \item Elasticsearch backend
-            \item Full-text search
-            \item Vector search
-            \item Hybrid search capability
-        \end{itemize}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{4.5 English RAG Results}
+\begin{frame}{English RAG Results}
     \begin{table}[h]
         \centering
         \tiny
@@ -158,40 +89,22 @@
     \vspace{0.5em}
     
     \begin{center}
-        \textbf{Improvements:}\\
-        +1.09\% vs fine-tuned model\\
-        +6.73\% vs base model\\
+        \textbf{Improvements with RAG:}\\
+        +1.09\% vs fine-tuned model | +6.73\% vs base model\\
         Highest gain in College Medicine (+2.29\%)
     \end{center}
 \end{frame}
 
-% PART 2: Bilingual RAG System
-\begin{frame}[plain]
-    \begin{center}
-        \Large{\textbf{Part 2}}\\
-        \vspace{0.5em}
-        \huge{\textbf{Bilingual RAG System}}\\
-    \end{center}
-\end{frame}
-
-\begin{frame}{4.6 Persian Integration}
-    \textbf{Motivation:}
+\begin{frame}{Bilingual System Overview}
+    \textbf{Persian Integration Motivation:}
     \begin{itemize}
         \item Lack of credible Persian medical resources
         \item Need to serve Persian-speaking users
+        \item Cross-lingual knowledge sharing
     \end{itemize}
     
     \vspace{0.5em}
     
-    \textbf{Persian Medical Corpus:}
-    \begin{itemize}
-        \item Comprehensive Persian medical content
-        \item Collected from credible domestic sources
-        \item Processed with Hazm library
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{4.7 Bilingual Dataset Overview}
     \begin{table}[h]
         \centering
         \footnotesize
@@ -214,31 +127,20 @@
     \end{center}
 \end{frame}
 
-\begin{frame}{4.8 Persian Processing}
-    \textbf{Preprocessing with Hazm:}
+\begin{frame}{Persian Processing and Cross-lingual Challenges}
+    \textbf{Persian Processing with Hazm:}
     \begin{itemize}
-        \item Text normalization
-        \item Sentence boundary detection
-        \item Appropriate tokenization
+        \item Text normalization and sentence boundary detection
+        \item Max chunk: 500 chars, Overlap: 100 chars
+        \item Generated 5,176,679 chunks from 102K documents
     \end{itemize}
     
     \vspace{0.5em}
     
-    \textbf{Chunking Configuration:}
-    \begin{itemize}
-        \item Method: Recursive + Late Chunking
-        \item Generated 5,176,679 chunks
-        \item Max chunk: 500 characters
-        \item Overlap: 100 characters
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{4.9 Bilingual Challenges}
     \textbf{Cross-lingual Retrieval Challenge:}
-    
     \begin{itemize}
         \item Users ask in Persian, documents in English (and vice versa)
-        \item Traditional methods (TF-IDF, BM25) fail in bilingual context
+        \item Traditional methods (TF-IDF, BM25) fail
     \end{itemize}
     
     \vspace{0.5em}
@@ -248,17 +150,10 @@
         \colorbox{highlight!20}{\textbf{Cosine similarity on multilingual embeddings}}
     \end{center}
     
-    \vspace{0.5em}
-    
-    \textbf{Benefits:}
-    \begin{itemize}
-        \item Cross-lingual semantic understanding
-        \item Unified knowledge base management
-        \item Implicit concept translation
-    \end{itemize}
+    Benefits: Cross-lingual semantic understanding, unified knowledge base
 \end{frame}
 
-\begin{frame}{4.10 Persian RAG Results}
+\begin{frame}{Persian RAG Results and System Comparison}
     \begin{table}[h]
         \centering
         \footnotesize
@@ -274,18 +169,8 @@
         \end{tabular}
     \end{table}
     
-    \vspace{0.5em}
+    \vspace{0.3em}
     
-    \begin{center}
-        \textbf{Improvements:}\\
-        +1.2\% vs fine-tuned model\\
-        +3.2\% vs base model\\
-        \vspace{0.5em}
-        \textbf{Notable achievement with 5M+ Persian chunks}
-    \end{center}
-\end{frame}
-
-\begin{frame}{4.11 System Performance Comparison}
     \begin{table}[h]
         \centering
         \caption{English vs Persian RAG Performance}
@@ -296,56 +181,38 @@
             Chunks & 373.5K & 5.17M \\
             Improvement vs Fine-tuned & +1.09\% & +1.2\% \\
             Improvement vs Base & +6.73\% & +3.2\% \\
-            Best Domain Improvement & College Med (+2.29\%) & All domains (+1-2\%) \\
             \bottomrule
         \end{tabular}
     \end{table}
+\end{frame}
+
+\begin{frame}{Chapter 4 Summary and Future Work}
+    \textbf{Key Achievements:}
+    \begin{itemize}
+        \item Implemented Late Chunking with 15-20\% retrieval improvement
+        \item Built bilingual system with 5.5M chunks
+        \item English: 78.83\% accuracy (+1.09\% with RAG)
+        \item Persian: 77\% accuracy (+1.2\% with RAG)
+        \item First comprehensive bilingual medical RAG system
+    \end{itemize}
     
     \vspace{0.5em}
     
-    \textbf{Key Achievement:}\\
-    First comprehensive bilingual medical RAG system
-\end{frame}
-
-\begin{frame}{4.12 Technical Limitations}
-    \textbf{Computational Constraints:}
+    \textbf{Technical Limitations:}
     \begin{itemize}
         \item Response latency from 5.5M chunks
         \item Storage requirements (~15GB)
-        \item Architecture complexity for bilingual management
+        \item Excluded Wikipedia (29.9M) and PubMed (23.9M) due to size
     \end{itemize}
     
     \vspace{0.5em}
     
-    \textbf{Design Decisions:}
+    \textbf{Future Improvements:}
     \begin{itemize}
-        \item Excluded Wikipedia (29.9M) and PubMed (23.9M) due to size
-        \item Focus on quality over quantity
-        \item Optimized for medical domain specificity
+        \item Graph RAG implementation
+        \item Specialized medical embeddings
+        \item More Persian medical sources
     \end{itemize}
-\end{frame}
-
-\begin{frame}{4.13 Future Improvements}
-    \begin{columns}[T]
-        \column{0.5\textwidth}
-        \textbf{Technical:}
-        \begin{itemize}
-            \item Graph RAG implementation
-            \item Specialized medical embeddings
-            \item Smart indexing optimization
-        \end{itemize}
-        
-        \column{0.5\textwidth}
-        \textbf{Knowledge Base:}
-        \begin{itemize}
-            \item More Persian medical sources
-            \item Auto-translation of quality content
-            \item Continuous updates
-            \item Domain gap filling
-        \end{itemize}
-    \end{columns}
-    
-    \vspace{1em}
     
     \begin{center}
         \colorbox{highlight!20}{\textbf{Effective bilingual medical AI assistant achieved}}

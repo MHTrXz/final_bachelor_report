@@ -9,67 +9,25 @@
         \vspace{0.5em}
         \large{Project Summary and Recommendations}
     \end{center}
-\end{frame}
-
-\begin{frame}{6.1 Project Summary}
-    \textbf{Comprehensive Medical AI Assistant Development:}
     
     \vspace{0.5em}
     
     \begin{center}
-    \begin{tikzpicture}
-        \node[circle,draw,fill=blue!20,minimum size=2cm] (sft) at (0,0) {SFT};
-        \node[circle,draw,fill=green!20,minimum size=2cm] (rag) at (3,0) {RAG};
-        \node[circle,draw,fill=red!20,minimum size=2cm] (guard) at (1.5,-2) {Guardrails};
+    \begin{tikzpicture}[scale=0.8, transform shape]
+        \node[circle,draw,fill=blue!20,minimum size=1.5cm] (sft) at (0,0) {SFT};
+        \node[circle,draw,fill=green!20,minimum size=1.5cm] (rag) at (2.5,0) {RAG};
+        \node[circle,draw,fill=red!20,minimum size=1.5cm] (guard) at (1.25,-1.5) {Guardrails};
         
         \draw[<->,thick] (sft) -- (rag);
         \draw[<->,thick] (sft) -- (guard);
         \draw[<->,thick] (rag) -- (guard);
         
-        \node at (1.5,-3.5) {\textbf{Integrated Bilingual System}};
+        \node at (1.25,-2.5) {\textbf{Integrated Bilingual System}};
     \end{tikzpicture}
     \end{center}
-    
-    Three core technologies integrated for reliable medical assistance in English and Persian
 \end{frame}
 
-\begin{frame}{6.2 Key Achievements - English}
-    \textbf{Fine-tuning Results:}
-    \begin{itemize}
-        \item Model: Gemma-3-12B-IT with 200K medical samples
-        \item Best improvement: MedQA with +9.22\% accuracy
-        \item Final model: gemma-3-12b-it-en-sft
-    \end{itemize}
-    
-    \vspace{0.5em}
-    
-    \textbf{RAG System:}
-    \begin{itemize}
-        \item 373.5K specialized documents (StatePearls + Textbooks)
-        \item Late Chunking technique implementation
-        \item Additional improvement: up to 2.29\% in some domains
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{6.3 Key Achievements - Persian}
-    \textbf{Model Development:}
-    \begin{itemize}
-        \item Two models trained: gpt-oss-20b and Gemma-3-12B-IT
-        \item Dataset: MF3QA (22K samples)
-        \item Best model: gemma-3-12b-it-fa-sft (70.8\% accuracy)
-    \end{itemize}
-    
-    \vspace{0.5em}
-    
-    \textbf{Bilingual RAG:}
-    \begin{itemize}
-        \item Persian Medical Corpus: 5,176,679 chunks
-        \item Cross-lingual search capability
-        \item Comprehensive bilingual platform
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{6.4 Final Performance Summary}
+\begin{frame}{Key Achievements and Performance Summary}
     \begin{table}[h]
         \centering
         \footnotesize
@@ -84,117 +42,56 @@
         \end{tabular}
     \end{table}
     
-    \vspace{0.5em}
-    
-    \textbf{Strengths:}
+    \textbf{English System:}
     \begin{itemize}
-        \item Comprehensive improvement across all metrics
-        \item High security with content filtering
-        \item Full bilingual support
-        \item Cross-lingual search capability
+        \item Fine-tuning: Gemma-3-12B-IT with 200K samples → \textbf{77.3\% accuracy}
+        \item RAG: 373.5K chunks with Late Chunking → +1.09\% improvement
+        \item Best gain: MedQA with +9.22\% improvement
     \end{itemize}
     
-    \textbf{Weaknesses:}
+    \textbf{Persian System:}
     \begin{itemize}
-        \item 176\% increase in response time
-        \item Limited English RAG data
-        \item Imbalanced bilingual resources
+        \item Fine-tuning: MF3QA dataset (22K) → \textbf{70.8\% accuracy}
+        \item RAG: 5.17M Persian chunks → +1.2\% improvement
+        \item 25-45\% better than existing Persian models
+    \end{itemize}
+    
+    \textbf{Security:}
+    \begin{itemize}
+        \item 17 total policies (9 input + 8 output)
+        \item \textcolor{red}{176\% latency increase} (additional 730ms)
     \end{itemize}
 \end{frame}
 
-\begin{frame}{6.5 Practical Applications}
-    \begin{columns}[T]
-        \column{0.33\textwidth}
-        \textbf{Clinical:}
-        \begin{itemize}
-            \item Medical centers
-            \item Online consultation
-            \item Decision support
-        \end{itemize}
-        
-        \column{0.33\textwidth}
-        \textbf{Educational:}
-        \begin{itemize}
-            \item Medical training
-            \item Student platforms
-            \item Public health literacy
-        \end{itemize}
-        
-        \column{0.34\textwidth}
-        \textbf{Research:}
-        \begin{itemize}
-            \item Literature access
-            \item Cross-lingual collaboration
-            \item Knowledge synthesis
-        \end{itemize}
-    \end{columns}
-\end{frame}
-
-\begin{frame}{6.6 Future Work - Priority 1}
-    \textbf{Reinforcement Learning Implementation:}
-    
+\begin{frame}{Future Work and Final Conclusion}
+    \textbf{Priority 1 - Reinforcement Learning:}
     \begin{itemize}
-        \item Improve response quality through user feedback
-        \item Adapt to user preferences
-        \item Reduce inappropriate responses
-        \item Ensure balanced bilingual quality
-    \end{itemize}
-    
-    \vspace{0.5em}
-    
-    \textbf{Implementation Plan:}
-    \begin{enumerate}
         \item Collect bilingual expert feedback
-        \item Design reward function (accuracy, safety, usefulness)
         \item Apply PPO or DPO techniques
-        \item Separate evaluation for each language
-        \item Continuous improvement system
-    \end{enumerate}
-\end{frame}
-
-\begin{frame}{6.7 Future Work - Priority 2}
-    \textbf{Guardrails Optimization:}
-    
-    Target: Reduce response time to <500ms while maintaining >90\% filtering accuracy
-    
-    \begin{itemize}
-        \item \textbf{Smaller models:} DistilBERT (English), ParsBERT (Persian)
-        \item \textbf{Parallel processing:} Async pipeline optimization
-        \item \textbf{Smart caching:} Semantic hashing for similar requests
-        \item \textbf{Complexity reduction:} Rule-based for simple cases
+        \item Improve response quality and safety
     \end{itemize}
     
-    \vspace{0.5em}
-    
-    \textbf{RAG Enhancement:}
+    \textbf{Priority 2 - System Optimization:}
     \begin{itemize}
-        \item Fine-tune embedder for medical domain
-        \item Implement Graph RAG
-        \item Expand Persian knowledge base
-        \item Balance bilingual resources
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{6.8 Final Conclusion}
-    \textbf{Project Achievements:}
-    \begin{itemize}
-        \item \checkmark Successful bilingual medical assistant development
-        \item \checkmark 5.5M+ chunk RAG system implementation
-        \item \checkmark Comprehensive security mechanisms
-        \item \checkmark Proof of concept for Persian medical AI
+        \item \textbf{Guardrails:} Reduce latency to <500ms (DistilBERT/ParsBERT)
+        \item \textbf{RAG:} Fine-tune embedder, implement Graph RAG
+        \item \textbf{Knowledge:} Expand Persian resources, balance bilingual content
     \end{itemize}
     
     \vspace{0.5em}
     
     \textbf{Key Contributions:}
     \begin{itemize}
-        \item First comprehensive Persian medical AI system
-        \item Novel Late Chunking implementation
-        \item Effective integration of SFT + RAG + Guardrails
-        \item Template for other specialized domains
+        \item \checkmark First comprehensive Persian medical AI system
+        \item \checkmark 5.5M+ chunk bilingual RAG implementation
+        \item \checkmark Novel Late Chunking with 15-20\% retrieval improvement
+        \item \checkmark Effective integration of SFT + RAG + Guardrails
+        \item \checkmark Template for other specialized domains
     \end{itemize}
     
     \vspace{0.5em}
+    
+    \textbf{Applications:} Clinical decision support, Medical education, Research collaboration
     
     \begin{center}
         \colorbox{highlight!20}{\textbf{Ready for real-world clinical and educational deployment}}
